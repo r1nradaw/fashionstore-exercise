@@ -1,4 +1,5 @@
 import ProductList from "@/components/product/ProductList";
+import { CartContext } from "@/contexts/cart";
 import { Category, Product } from "@/models/product";
 import { useEffect, useState } from "react";
 
@@ -32,11 +33,16 @@ const fetchProducts = (): Promise<Product[]> => {
   return new Promise((resolve) => resolve(products));
 };
 
+
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [productCountInCart, setProductCountInCart] = useState<number>(1);
   const onAddProduct = (productId: string) => {
+    // const productInCartContext = useContext(cartContext);
+    setProductCountInCart((prev) => (prev+1));
     console.log(`add product:${productId} to the cart.`);
+    console.log(`now you have:${productCountInCart} products.`);
   };
 
   useEffect(() => {
@@ -54,11 +60,13 @@ export default function Home() {
   }, []);
   return (
     <>
+    <CartContext.Provider value={productCountInCart}>
       {isLoading ? (
         "Loading..."
       ) : (
         <ProductList items={products} onAddProduct={onAddProduct} />
       )}
+      </CartContext.Provider>
     </>
   );
 }
