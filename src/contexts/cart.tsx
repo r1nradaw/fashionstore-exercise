@@ -1,3 +1,10 @@
-import { createContext } from "react";
+import { Dispatch, SetStateAction, createContext } from "react";
 
-export const CartContext = createContext(0);
+export interface IProductCart {
+  [key: string]: number;
+}
+interface ICartContext {
+  productInCart: IProductCart;
+  setProductCountInCart: Dispatch<SetStateAction<IProductCart>>;
+}
+export const CartContext = createContext<ICartContext | null>(null);
